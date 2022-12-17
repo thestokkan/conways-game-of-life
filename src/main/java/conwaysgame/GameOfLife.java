@@ -134,6 +134,13 @@ public class GameOfLife {
       if (numberOfNeighbors < 2 || numberOfNeighbors > 3) {
         cell.setDoomed();
       }
+
+      // Also set cell as doomed if it moves off-screen
+      int cellX = cell.getPosition().getX();
+      int cellY = cell.getPosition().getY();
+      if (cellX >= xMax || cellY >= yMax || cellX <= 0 || cellY <= 0) {
+        cell.setDoomed();
+      }
     }
   }
 
