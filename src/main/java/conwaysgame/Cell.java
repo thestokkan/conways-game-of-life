@@ -32,6 +32,6 @@ public class Cell {
   }
 
   public String getMarker() {
-    return "o";
+    return "\uD83E\uDDA0";
   }
 }

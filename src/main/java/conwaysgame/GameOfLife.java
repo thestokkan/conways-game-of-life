@@ -1,5 +1,6 @@
 package conwaysgame;
 
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
@@ -15,11 +16,17 @@ public class GameOfLife {
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
 
+  static final int cycleTimeMs = 200;
+  static final int startingPosX = 0;
+  static final int startingPosY = 0;
+
   public GameOfLife() throws IOException {
   }
 
   public void setUpGame() throws IOException {
     t.setCursorVisible(false);
+
+    // Cell structure
     cells.clear();
     cells.add(new Cell(1, 1));
     cells.add(new Cell(3, 1));
@@ -37,6 +44,7 @@ public class GameOfLife {
     g.displayCells();
 
     while (g.cells.size() > 0) {
+      g.showCyclesOnScreen(cycles);
       cycles++;
       if (g.allCellsOffScreen()) {
         g.t.clearScreen();
@@ -46,10 +54,16 @@ public class GameOfLife {
       g.markCellsAsDoomed();
       g.populateNewCells(g.getEmptyFieldsToCheck());
       g.removeDeadCells();
-      Thread.sleep(100);
+      Thread.sleep(cycleTimeMs);
       g.displayCells();
     }
-    System.out.println("Number of cycles: " + cycles);
+  }
+
+  private void showCyclesOnScreen(int cycles) throws IOException {
+    t.setCursorPosition(xMax - Integer.toString(cycles).length() - 1, 1);
+    t.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
+    t.putString(""+ cycles);
+    t.flush();
   }
 
   private boolean allCellsOffScreen() {
