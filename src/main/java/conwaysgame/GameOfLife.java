@@ -22,8 +22,6 @@ public class GameOfLife {
       g.displayCells();
       if (counter > 2) break;
     }
-
-
   }
 
   private void displayCells() {
@@ -37,12 +35,13 @@ public class GameOfLife {
   }
 
 
-  public void setUpGame() {
+  public void setUpGameForTesting() {
     Cell c1 = new Cell(1, 2);
     Cell c2 = new Cell(2, 2);
     Cell c3 = new Cell(3, 2);
     Cell c4 = new Cell(3, 3);
 
+    cells.clear();
     cells.add(c1);
     cells.add(c2);
     cells.add(c3);
@@ -65,7 +64,7 @@ public class GameOfLife {
     return numberOfNeighbors;
   }
 
-  private void markCellsAsDoomed() {
+  void markCellsAsDoomed() {
     for (Cell cell : cells) {
       int numberOfNeighbors = numberOfNeighbors(cell.getPosition());
       if (numberOfNeighbors < 2 || numberOfNeighbors > 3) {
@@ -111,7 +110,15 @@ public class GameOfLife {
     newCells.clear();
   }
 
-  public List<Cell> getNewCells() { return newCells; }
+  public int getCellsSize() {
+    return cells.size();
+  }
 
-  public List<Cell> getCells() { return cells; }
+  public void addToCells(Cell cell) {
+    cells.add(cell);
+  }
+
+  public Cell getFromCells(int i) {
+    return cells.get(i);
+  }
 }
