@@ -31,19 +31,39 @@ public class GameOfLife {
 
   public static void main(String[] args) throws IOException, InterruptedException {
     GameOfLife g = new GameOfLife();
-    int counter = 0;
+    int cycles = 0;
 
     g.setUpGame();
     g.displayCells();
 
-    while (g.cells.size() > 2) {
-      counter++;
+    while (g.cells.size() > 0) {
+      cycles++;
+      if (g.allCellsOffScreen()) {
+        g.t.clearScreen();
+        g.t.flush();
+        break;
+      }
       g.markCellsAsDoomed();
       g.populateNewCells(g.getEmptyFieldsToCheck());
       g.removeDeadCells();
       Thread.sleep(100);
       g.displayCells();
     }
+    System.out.println("Number of cycles: " + cycles);
+  }
+
+  private boolean allCellsOffScreen() {
+    boolean offScreen = true;
+
+    for (Cell cell : cells) {
+      int cellX = cell.getPosition().getX();
+      int cellY = cell.getPosition().getY();
+      if (cellX < xMax && cellY < yMax) {
+        offScreen = false;
+        break;
+      }
+    }
+    return offScreen;
   }
 
   private void displayCells() throws IOException {
@@ -52,15 +72,13 @@ public class GameOfLife {
     for (Cell cell : cells) {
       int cellX = cell.getPosition().getX();
       int cellY = cell.getPosition().getY();
-
-      if (cellX < xMax && cellY < yMax) {
-        t.setCursorPosition(cellX, cellY);
-        t.putString(cell.getMarker());
-      }
+      t.setCursorPosition(cellX, cellY);
+      t.putString(cell.getMarker());
     }
     t.flush();
   }
 
+  // For testing purposes
   private void printCells() {
     for (Cell cell : cells) {
       System.out.println(cell.toString());
