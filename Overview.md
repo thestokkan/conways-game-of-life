@@ -1,0 +1,39 @@
+# RULES
+- Add a character that the player can move around with arrow keys
+- Add "zombies"
+- Try to make the zombies move after the player
+- When a zombie reaches the player (same position), it's game over
+
+# STRUCTURE
+- **ZombieLand**
+  - The game class
+  - Makes player and zombie objects
+  - Set up game
+  - Gets user input
+  - lanternagame.Game loop: play until game over or quit
+    - Check if player is killed
+    - Finish game
+- **lanternagame.Player**
+  - lanternagame.Player class
+  - fields
+    - symbol
+    - lives
+    - x
+    - y
+  - methods
+    - move
+      - controlled by player using arrow keys
+    - getters and setters
+- **lanternagame.Zombie**
+  - lanternagame.Zombie class
+  - fields
+    - symbol
+    - x
+    - y
+    - speed
+  - methods
+    - killedPlayer
+      - knows if it has same position as player
+    - move
+      - try to catch player
+    - getters and setters
