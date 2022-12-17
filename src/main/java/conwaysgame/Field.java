@@ -33,4 +33,8 @@ public class Field {
     return y;
   }
 
+  public Field add(Field field) {
+      return new Field(this.x + field.x, this.y + field.y);
+  }
+
 }
