@@ -1,12 +1,35 @@
 package conwaysgame;
 
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.Terminal;
+
+import java.io.IOException;
 import java.util.*;
 
 public class GameOfLife {
+  private final DefaultTerminalFactory d = new DefaultTerminalFactory();
+  private final Terminal t = d.createTerminal();
+  private final int xMax = t.getTerminalSize().getColumns();
+  private final int yMax = t.getTerminalSize().getRows();
+
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
 
-  public static void main(String[] args) {
+  public GameOfLife() throws IOException {
+  }
+
+  public void setUpGame() throws IOException {
+    t.setCursorVisible(false);
+    cells.clear();
+    cells.add(new Cell(1, 1));
+    cells.add(new Cell(3, 1));
+    cells.add(new Cell(2, 2));
+    cells.add(new Cell(2, 3));
+    cells.add(new Cell(3, 2));
+
+  }
+
+  public static void main(String[] args) throws IOException, InterruptedException {
     GameOfLife g = new GameOfLife();
     int counter = 0;
 
@@ -15,25 +38,34 @@ public class GameOfLife {
 
     while (g.cells.size() > 2) {
       counter++;
-      System.out.println("=== Round " + counter + " ===");
       g.markCellsAsDoomed();
       g.populateNewCells(g.getEmptyFieldsToCheck());
       g.removeDeadCells();
+      Thread.sleep(100);
       g.displayCells();
-      if (counter > 2) break;
     }
   }
 
-  private void displayCells() {
+  private void displayCells() throws IOException {
+    t.clearScreen();
+    t.flush();
+    for (Cell cell : cells) {
+      int cellX = cell.getPosition().getX();
+      int cellY = cell.getPosition().getY();
+
+      if (cellX < xMax && cellY < yMax) {
+        t.setCursorPosition(cellX, cellY);
+        t.putString(cell.getMarker());
+      }
+    }
+    t.flush();
+  }
+
+  private void printCells() {
     for (Cell cell : cells) {
       System.out.println(cell.toString());
     }
   }
-
-  private void testStuff() {
-
-  }
-
 
   public void setUpGameForTesting() {
     Cell c1 = new Cell(1, 2);

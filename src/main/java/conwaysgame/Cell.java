@@ -30,4 +30,8 @@ public class Cell {
   public String toString() {
     return "Cell{" + "position=(" + position.getX() + "," + position.getY() + "), isDoomed=" + isDoomed + '}';
   }
+
+  public String getMarker() {
+    return "o";
+  }
 }
