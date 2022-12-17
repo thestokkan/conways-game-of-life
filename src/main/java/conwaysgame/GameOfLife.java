@@ -1,21 +1,35 @@
 package conwaysgame;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GameOfLife {
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
 
   public static void main(String[] args) {
-    GameOfLife game = new GameOfLife();
+    GameOfLife g = new GameOfLife();
+    int counter = 0;
 
-    game.setUpGame();
+    g.setUpGame();
+    g.displayCells();
+
+    while (g.cells.size() > 2) {
+      counter++;
+      System.out.println("=== Round " + counter + " ===");
+      g.markCellsAsDoomed();
+      g.populateNewCells(g.getEmptyFieldsToCheck());
+      g.removeDeadCells();
+      g.displayCells();
+      if (counter > 2) break;
+    }
 
 
+  }
 
-    game.testStuff();
-
+  private void displayCells() {
+    for (Cell cell : cells) {
+      System.out.println(cell.toString());
+    }
   }
 
   private void testStuff() {
@@ -51,6 +65,15 @@ public class GameOfLife {
     return numberOfNeighbors;
   }
 
+  private void markCellsAsDoomed() {
+    for (Cell cell : cells) {
+      int numberOfNeighbors = numberOfNeighbors(cell.getPosition());
+      if (numberOfNeighbors < 2 || numberOfNeighbors > 3) {
+        cell.setDoomed();
+      }
+    }
+  }
+
   public Set<Field> getEmptyFieldsToCheck() {
     Set<Field> fieldsToCheck = new HashSet<>();
 
@@ -74,8 +97,8 @@ public class GameOfLife {
     return fieldsToCheck;
   }
 
-  public void removeDeadCells(List<Cell> cellsList) {
-    cellsList.removeIf(Cell::isDoomed);
+  public void removeDeadCells() {
+    cells.removeIf(Cell::isDoomed);
   }
 
   public void populateNewCells(Set<Field> fieldsToCheck) {
@@ -84,14 +107,11 @@ public class GameOfLife {
         newCells.add(new Cell(field));
       }
     }
-
+    cells.addAll(newCells);
+    newCells.clear();
   }
 
-  public List<Cell> getNewCells() {
-    return newCells;
-  }
+  public List<Cell> getNewCells() { return newCells; }
 
-  public List<Cell> getCells() {
-    return cells;
-  }
+  public List<Cell> getCells() { return cells; }
 }

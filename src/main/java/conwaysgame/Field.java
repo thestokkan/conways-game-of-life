@@ -25,22 +25,6 @@ public class Field {
                    new Field(x + 1, y - 1));
   }
 
-
-//  @Override
-//  public boolean equals(Object obj) {
-//    if(obj instanceof Field)
-//    {
-//      Field temp = (Field) obj;
-//      return this.x == temp.x && this.y == temp.y;
-//    }
-//    return false;
-//  }
-//
-//  @Override
-//  public int hashCode() {
-//    return (x.hashCode() + y.hashCode());
-//  }
-
   public int getX() {
     return x;
   }

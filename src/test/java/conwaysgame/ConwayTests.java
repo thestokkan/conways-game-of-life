@@ -48,8 +48,8 @@ public class ConwayTests {
     cells.add(doomedCell1);
     cells.add(doomedCell2);
 
-    game.removeDeadCells(cells);
-    Assertions.assertEquals(1, cells.size());
+    game.removeDeadCells();
+    Assertions.assertEquals(1, game.getCells().size());
   }
 
   @Test
