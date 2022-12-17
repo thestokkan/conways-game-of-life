@@ -60,9 +60,9 @@ public class GameOfLife {
   }
 
   private void showCyclesOnScreen(int cycles) throws IOException {
-    t.setCursorPosition(xMax - Integer.toString(cycles).length() - 1, 1);
+    t.setCursorPosition(5, 1);
     t.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
-    t.putString(""+ cycles);
+    t.putString("" + cycles);
     t.flush();
   }
 
