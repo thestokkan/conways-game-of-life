@@ -13,7 +13,7 @@ public class ConwayTests {
   @BeforeEach
   void setUp() throws IOException {
     game = new GameOfLife();
-    game.setUpGameForTesting();
+    game.setUpForTesting();
   }
 
   @Test

@@ -5,7 +5,10 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GameOfLife {
   private final DefaultTerminalFactory d = new DefaultTerminalFactory();
@@ -13,27 +16,48 @@ public class GameOfLife {
   private final int xMax = t.getTerminalSize().getColumns();
   private final int yMax = t.getTerminalSize().getRows();
 
+  // Settings
+  static final int cycleTimeMs = 200;
+  private final List<Field> glider1 =
+          List.of(new Field(1, 1),
+                  new Field(3, 1),
+                  new Field(2, 2),
+                  new Field(2, 3),
+                  new Field(3, 2));
+
+  private final List<Field> glider2 =
+          List.of(new Field(1, 1),
+                  new Field(2, 1),
+                  new Field(3, 1),
+                  new Field(1, 2),
+                  new Field(2, 3));
+
+  private final List<Field> lightweightSpaceShip =
+          List.of(new Field(2, 1),
+                  new Field(5, 1),
+                  new Field(1, 2),
+                  new Field(1, 3),
+                  new Field(1, 4),
+                  new Field(2, 4),
+                  new Field(3, 4),
+                  new Field(4, 4),
+                  new Field(5, 3));
+
+  private final List<Field> loaf =
+          List.of(new Field(2, 1),
+                  new Field(3, 1),
+                  new Field(1, 2),
+                  new Field(1, 3),
+                  new Field(3, 2),
+                  new Field(3, 3),
+                  new Field(2, 3));
+  // End settings
+
+  private final List<List<Field>> cellStructures = List.of(glider1, lightweightSpaceShip);
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
 
-  static final int cycleTimeMs = 200;
-  static final int startingPosX = 0;
-  static final int startingPosY = 0;
-
   public GameOfLife() throws IOException {
-  }
-
-  public void setUpGame() throws IOException {
-    t.setCursorVisible(false);
-
-    // Cell structure
-    cells.clear();
-    cells.add(new Cell(1, 1));
-    cells.add(new Cell(3, 1));
-    cells.add(new Cell(2, 2));
-    cells.add(new Cell(2, 3));
-    cells.add(new Cell(3, 2));
-
   }
 
   public static void main(String[] args) throws IOException, InterruptedException {
@@ -46,11 +70,6 @@ public class GameOfLife {
     while (g.cells.size() > 0) {
       g.showCyclesOnScreen(cycles);
       cycles++;
-      if (g.allCellsOffScreen()) {
-        g.t.clearScreen();
-        g.t.flush();
-        break;
-      }
       g.markCellsAsDoomed();
       g.populateNewCells(g.getEmptyFieldsToCheck());
       g.removeDeadCells();
@@ -59,25 +78,26 @@ public class GameOfLife {
     }
   }
 
+  public void setUpGame() throws IOException {
+    t.setCursorVisible(false);
+
+    cells.clear();
+
+    for (List<Field> cellStructure : cellStructures) {
+      int randX = (int)(Math.random() * xMax);
+      int randY = (int)(Math.random() * yMax);
+      Field startingPosition = new Field(randX, randY);
+      for (Field field : cellStructure) {
+        cells.add(new Cell(field.add(startingPosition)));
+      }
+    }
+  }
+
   private void showCyclesOnScreen(int cycles) throws IOException {
     t.setCursorPosition(5, 1);
     t.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
     t.putString("" + cycles);
     t.flush();
-  }
-
-  private boolean allCellsOffScreen() {
-    boolean offScreen = true;
-
-    for (Cell cell : cells) {
-      int cellX = cell.getPosition().getX();
-      int cellY = cell.getPosition().getY();
-      if (cellX < xMax && cellY < yMax) {
-        offScreen = false;
-        break;
-      }
-    }
-    return offScreen;
   }
 
   private void displayCells() throws IOException {
@@ -92,14 +112,7 @@ public class GameOfLife {
     t.flush();
   }
 
-  // For testing purposes
-  private void printCells() {
-    for (Cell cell : cells) {
-      System.out.println(cell.toString());
-    }
-  }
-
-  public void setUpGameForTesting() {
+  public void setUpForTesting() {
     Cell c1 = new Cell(1, 2);
     Cell c2 = new Cell(2, 2);
     Cell c3 = new Cell(3, 2);
