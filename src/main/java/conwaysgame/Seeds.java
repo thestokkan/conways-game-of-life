@@ -6,7 +6,16 @@ import java.util.List;
 
 @Getter
 public class Seeds {
-  private final List<Field> spinningLine =
+  private final List<Field> sevenInARow =
+          List.of(new Field(0, 0),
+                  new Field(1, 0),
+                  new Field(2, 0),
+                  new Field(3, 0),
+                  new Field(4, 0),
+                  new Field(5, 0),
+                  new Field(6, 0));
+
+  private final List<Field> threeInARow =
           List.of(new Field(0, 0),
                   new Field(1, 0),
                   new Field(2, 0));
