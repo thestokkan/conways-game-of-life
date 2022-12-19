@@ -11,18 +11,26 @@ import java.util.List;
 import java.util.Set;
 
 public class GameOfLife {
+  // Lanterna terminal
   private final DefaultTerminalFactory d = new DefaultTerminalFactory();
   private final Terminal t = d.createTerminal();
   private final int xMax = t.getTerminalSize().getColumns();
   private final int yMax = t.getTerminalSize().getRows();
+  // Starting positions
+  private final Field center= new Field(xMax/2, yMax/2);
+  private final Field topLeft= new Field(0, 0);
+  private final Field topRight= new Field(xMax - 3, 3);
+  private final Field bottomLeft= new Field(3, yMax - 3);
+  private final Field bottomRight= new Field(xMax - 3, yMax - 3);
+  private final Field centerLeft= new Field(3, yMax/2);
+  private final Field centerRight= new Field(xMax - 3, yMax/2);
 
-  CellStructures cs = new CellStructures();
+  Seeds s = new Seeds();
   // === SETTINGS ===
-  private final List<List<Field>> cellStructures = List.of(cs.getGlider1(), cs.getGlider1(), cs.getGlider1());
+  private final List<List<Field>> cellStructures = List.of(s.getLightweightSpaceShip(), s.getGlider1());
   private final boolean isRandomStartingPosition = false;
-  private final List<Field> fixedStartingPositions = List.of(new Field(0, 0), new Field(20, 0),
-                                                             new Field(40, 0));
-  static final int cycleTimeMs = 100;
+  private final List<Field> fixedStartingPositions = List.of(topRight, topLeft);
+  static final int cycleTimeMs = 200;
   // === END SETTINGS ===
 
   private final List<Cell> newCells = new ArrayList<>();
@@ -45,7 +53,8 @@ public class GameOfLife {
       g.removeDoomedCells();
       Thread.sleep(cycleTimeMs);
       g.displayCells();
-    }
+      cycles++;
+        }
     g.printExtinctMessage();
     g.printCycles(cycles);
     System.out.println("All life is extinct...");
@@ -88,9 +97,10 @@ public class GameOfLife {
       int cellX = cell.getPosition().getX();
       int cellY = cell.getPosition().getY();
       t.setCursorPosition(cellX, cellY);
-      t.putString(cell.getMarker());
+      t.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
+      t.putCharacter(cell.getMarker());
+      t.flush();
     }
-    t.flush();
   }
 
   public void setUpForTesting() {
