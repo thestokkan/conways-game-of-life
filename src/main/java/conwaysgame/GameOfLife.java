@@ -47,6 +47,8 @@ public class GameOfLife {
       Thread.sleep(cycleTimeMs);
       g.displayCells();
     }
+    g.printExtinctMessage();
+    System.out.println("All life is extinct...");
   }
 
   private Field getRandomStartingPosition() {
@@ -171,6 +173,13 @@ public class GameOfLife {
     }
     cells.addAll(newCells);
     newCells.clear();
+  }
+
+  private void printExtinctMessage() throws IOException {
+    String message = "ALL LIFE IS EXTINCT...";
+    t.setCursorPosition((xMax / 2) - (message.length() / 2), (yMax / 2) - 1);
+    t.putString(message);
+    t.flush();
   }
 
   public int getCellsSize() {
