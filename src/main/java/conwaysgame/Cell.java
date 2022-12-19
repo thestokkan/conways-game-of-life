@@ -31,7 +31,7 @@ public class Cell {
     return "Cell{" + "position=(" + position.getX() + "," + position.getY() + "), isDoomed=" + isDoomed + '}';
   }
 
-  public String getMarker() {
-    return "\uD83E\uDDA0";
+  public Character getMarker() {
+    return '*';
   }
 }
