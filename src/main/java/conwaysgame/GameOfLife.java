@@ -32,28 +32,6 @@ public class GameOfLife {
                   new Field(1, 2),
                   new Field(2, 3));
 
-  private final List<Field> lightweightSpaceShip =
-          List.of(new Field(2, 1),
-                  new Field(5, 1),
-                  new Field(1, 2),
-                  new Field(1, 3),
-                  new Field(1, 4),
-                  new Field(2, 4),
-                  new Field(3, 4),
-                  new Field(4, 4),
-                  new Field(5, 3));
-
-  private final List<Field> loaf =
-          List.of(new Field(2, 1),
-                  new Field(3, 1),
-                  new Field(1, 2),
-                  new Field(1, 3),
-                  new Field(3, 2),
-                  new Field(3, 3),
-                  new Field(2, 3));
-  // End settings
-
-  private final List<List<Field>> cellStructures = List.of(glider1, lightweightSpaceShip);
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
 
