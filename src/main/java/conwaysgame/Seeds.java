@@ -1,8 +1,24 @@
 package conwaysgame;
 
+import lombok.Getter;
+
 import java.util.List;
 
-public class CellStructures {
+@Getter
+public class Seeds {
+  private final List<Field> spinningLine =
+          List.of(new Field(0, 0),
+                  new Field(1, 0),
+                  new Field(2, 0));
+
+
+  private final List<Field> repeater =
+          List.of(new Field(1, 0),
+                  new Field(0, 1),
+                  new Field(1, 1),
+                  new Field(2, 1));
+
+
   private final List<Field> froydisAndTherese =
           List.of(new Field(0, 0),
                   new Field(1, 0),
@@ -44,24 +60,4 @@ public class CellStructures {
                   new Field(3, 2),
                   new Field(3, 3),
                   new Field(2, 3));
-
-  public List<Field> getFroydisAndTherese() {
-    return froydisAndTherese;
-  }
-
-  public List<Field> getGlider1() {
-    return glider1;
-  }
-
-  public List<Field> getGlider2() {
-    return glider2;
-  }
-
-  public List<Field> getLightweightSpaceShip() {
-    return lightweightSpaceShip;
-  }
-
-  public List<Field> getStaticLoaf() {
-    return staticLoaf;
-  }
 }
