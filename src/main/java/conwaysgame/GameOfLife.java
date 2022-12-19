@@ -48,6 +48,7 @@ public class GameOfLife {
       g.displayCells();
     }
     g.printExtinctMessage();
+    g.printCycles(cycles);
     System.out.println("All life is extinct...");
   }
 
@@ -176,6 +177,8 @@ public class GameOfLife {
   }
 
   private void printExtinctMessage() throws IOException {
+    t.clearScreen();
+    t.flush();
     String message = "ALL LIFE IS EXTINCT...";
     t.setCursorPosition((xMax / 2) - (message.length() / 2), (yMax / 2) - 1);
     t.putString(message);
