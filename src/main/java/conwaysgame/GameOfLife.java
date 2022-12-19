@@ -39,11 +39,10 @@ public class GameOfLife {
     g.displayCells();
 
     while (g.cells.size() > 0) {
-      g.showCyclesOnScreen(cycles);
-      cycles++;
-      g.markCellsAsDoomed();
-      g.populateNewCells(g.getEmptyFieldsToCheck());
-      g.removeDeadCells();
+      g.printCycles(cycles);
+      g.markDoomedCells();
+      g.populateNewCells(g.getEmptyFields());
+      g.removeDoomedCells();
       Thread.sleep(cycleTimeMs);
       g.displayCells();
     }
@@ -75,7 +74,7 @@ public class GameOfLife {
     }
   }
 
-  private void showCyclesOnScreen(int cycles) throws IOException {
+  private void printCycles(int cycles) throws IOException {
     t.setCursorPosition(5, 1);
     t.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
     t.putString("" + cycles);
@@ -123,7 +122,7 @@ public class GameOfLife {
     return numberOfNeighbors;
   }
 
-  void markCellsAsDoomed() {
+  void markDoomedCells() {
     for (Cell cell : cells) {
       int numberOfNeighbors = numberOfNeighbors(cell.getPosition());
       if (numberOfNeighbors < 2 || numberOfNeighbors > 3) {
@@ -139,7 +138,7 @@ public class GameOfLife {
     }
   }
 
-  public Set<Field> getEmptyFieldsToCheck() {
+  public Set<Field> getEmptyFields() {
     Set<Field> fieldsToCheck = new HashSet<>();
 
     for (Cell cell : cells) {
@@ -162,7 +161,7 @@ public class GameOfLife {
     return fieldsToCheck;
   }
 
-  public void removeDeadCells() {
+  public void removeDoomedCells() {
     cells.removeIf(Cell::isDoomed);
   }
 

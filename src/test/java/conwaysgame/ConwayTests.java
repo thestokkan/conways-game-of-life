@@ -24,7 +24,7 @@ public class ConwayTests {
 
   @Test
   void shouldGetCorrectNumberOfFieldsToCheck() {
-    int numberOfFieldsToCheck = game.getEmptyFieldsToCheck().size();
+    int numberOfFieldsToCheck = game.getEmptyFields().size();
     Assertions.assertEquals(14, numberOfFieldsToCheck);
   }
 
@@ -33,20 +33,20 @@ public class ConwayTests {
     Cell c1 = new Cell(2, 3);
     game.addToCells(c1);
     Assertions.assertEquals(5, game.getCellsSize());
-    game.markCellsAsDoomed();
+    game.markDoomedCells();
     Assertions.assertTrue(c1.isDoomed());
   }
 
   @Test
   void shouldDeleteDoomedCells() {
     shouldMarkCellsAsDoomed();
-    game.removeDeadCells();
+    game.removeDoomedCells();
     Assertions.assertEquals(3, game.getCellsSize());
   }
 
   @Test
   void ShouldCreateNewCell() {
-    Set<Field> fieldsToCheck = game.getEmptyFieldsToCheck();
+    Set<Field> fieldsToCheck = game.getEmptyFields();
 
     game.populateNewCells(fieldsToCheck);
 
