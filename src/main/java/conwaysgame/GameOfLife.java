@@ -16,21 +16,14 @@ public class GameOfLife {
   private final int xMax = t.getTerminalSize().getColumns();
   private final int yMax = t.getTerminalSize().getRows();
 
-  // Settings
-  static final int cycleTimeMs = 200;
-  private final List<Field> glider1 =
-          List.of(new Field(1, 1),
-                  new Field(3, 1),
-                  new Field(2, 2),
-                  new Field(2, 3),
-                  new Field(3, 2));
-
-  private final List<Field> glider2 =
-          List.of(new Field(1, 1),
-                  new Field(2, 1),
-                  new Field(3, 1),
-                  new Field(1, 2),
-                  new Field(2, 3));
+  CellStructures cs = new CellStructures();
+  // === SETTINGS ===
+  private final List<List<Field>> cellStructures = List.of(cs.getGlider1(), cs.getGlider1(), cs.getGlider1());
+  private final boolean isRandomStartingPosition = false;
+  private final List<Field> fixedStartingPositions = List.of(new Field(0, 0), new Field(20, 0),
+                                                             new Field(40, 0));
+  static final int cycleTimeMs = 100;
+  // === END SETTINGS ===
 
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
@@ -56,16 +49,24 @@ public class GameOfLife {
     }
   }
 
+  private Field getRandomStartingPosition() {
+    int randX = (int)(Math.random() * xMax);
+    int randY = (int)(Math.random() * yMax);
+    return new Field(randX, randY);
+  }
+
   public void setUpGame() throws IOException {
     t.setCursorVisible(false);
 
     cells.clear();
-
-    for (List<Field> cellStructure : cellStructures) {
-      int randX = (int)(Math.random() * xMax);
-      int randY = (int)(Math.random() * yMax);
-      Field startingPosition = new Field(randX, randY);
-      for (Field field : cellStructure) {
+    Field startingPosition;
+    for (int i = 0; i < cellStructures.size(); i++) {
+      if (isRandomStartingPosition) {
+         startingPosition = getRandomStartingPosition();
+      } else {
+          startingPosition = fixedStartingPositions.get(i);
+      }
+      for (Field field : cellStructures.get(i)) {
         cells.add(new Cell(field.add(startingPosition)));
       }
     }
