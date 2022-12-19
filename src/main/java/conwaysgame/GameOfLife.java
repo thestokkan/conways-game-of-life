@@ -27,14 +27,15 @@ public class GameOfLife {
 
   Seeds s = new Seeds();
   // === SETTINGS ===
-  private final List<List<Field>> cellStructures = List.of(s.getLightweightSpaceShip(), s.getGlider1());
+  private final List<List<Field>> cellStructures = List.of(s.getSevenInARow());
   private final boolean isRandomStartingPosition = false;
-  private final List<Field> fixedStartingPositions = List.of(topRight, topLeft);
-  static final int cycleTimeMs = 200;
+  private final List<Field> fixedStartingPositions = List.of(center);
+  static final int cycleTimeMs = 300;
   // === END SETTINGS ===
 
   private final List<Cell> newCells = new ArrayList<>();
   private final List<Cell> cells = new ArrayList<>();
+  boolean newCellsGenerated = false;
 
   public GameOfLife() throws IOException {
   }
@@ -53,11 +54,17 @@ public class GameOfLife {
       g.removeDoomedCells();
       Thread.sleep(cycleTimeMs);
       g.displayCells();
+      if (g.isStableStructure()) {
+        g.printStableMessage();
+        break;
+      }
       cycles++;
         }
-    g.printExtinctMessage();
+
+    if (g.cells.size() == 0) {
+      g.printExtinctMessage();
+    }
     g.printCycles(cycles);
-    System.out.println("All life is extinct...");
   }
 
   private Field getRandomStartingPosition() {
@@ -171,18 +178,25 @@ public class GameOfLife {
     return fieldsToCheck;
   }
 
-  public void removeDoomedCells() {
-    cells.removeIf(Cell::isDoomed);
+  public boolean removeDoomedCells() {
+    return cells.removeIf(Cell::isDoomed);
   }
 
-  public void populateNewCells(Set<Field> fieldsToCheck) {
+  public boolean populateNewCells(Set<Field> fieldsToCheck) {
+    newCellsGenerated = false;
     for (Field field : fieldsToCheck) {
       if (numberOfNeighbors(field) == 3) {
         newCells.add(new Cell(field));
+        newCellsGenerated = true;
       }
     }
     cells.addAll(newCells);
     newCells.clear();
+    return newCellsGenerated;
+  }
+
+  private boolean isStableStructure() {
+    return !removeDoomedCells() && !newCellsGenerated;
   }
 
   private void printExtinctMessage() throws IOException {
@@ -190,6 +204,13 @@ public class GameOfLife {
     t.flush();
     String message = "ALL LIFE IS EXTINCT...";
     t.setCursorPosition((xMax / 2) - (message.length() / 2), (yMax / 2) - 1);
+    t.putString(message);
+    t.flush();
+  }
+
+  private void printStableMessage() throws IOException {
+    String message = "YOU'VE REACHED A STABLE CONFIGURATION!";
+    t.setCursorPosition((xMax / 2) - (message.length() / 2), yMax - 2);
     t.putString(message);
     t.flush();
   }
